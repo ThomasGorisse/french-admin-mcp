@@ -1,49 +1,20 @@
 {
-  "name": "french-admin-mcp",
-  "version": "1.0.0",
-  "description": "Serveur MCP pour l'administration française — impôts, URSSAF, CAF, factures, courriers administratifs, conventions collectives, retraite",
-  "publisher": "Thomas Gorisse",
-  "homepage": "https://github.com/thomasgorisse/french-admin-mcp",
-  "license": "MIT",
-  "runtime": "node",
-  "command": "npx",
-  "args": ["-y", "french-admin-mcp"],
-  "tools": [
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ThomasGorisse/french-admin-mcp",
+  "description": "French admin MCP — tax simulation, URSSAF, CAF, invoices, official letters, retirement.",
+  "repository": {
+    "url": "https://github.com/ThomasGorisse/french-admin-mcp",
+    "source": "github"
+  },
+  "version": "1.0.1",
+  "packages": [
     {
-      "name": "simuler_impots",
-      "description": "Simule l'impôt sur le revenu français (barème 2025/2026)"
-    },
-    {
-      "name": "calculer_charges_ae",
-      "description": "Calcule les charges URSSAF d'un auto-entrepreneur"
-    },
-    {
-      "name": "generer_facture",
-      "description": "Génère une facture conforme au droit français"
-    },
-    {
-      "name": "declaration_urssaf",
-      "description": "Prépare la déclaration trimestrielle URSSAF"
-    },
-    {
-      "name": "aide_caf",
-      "description": "Estime les aides CAF (prime d'activité, APL, allocations)"
-    },
-    {
-      "name": "demarche_admin",
-      "description": "Guide étape par étape pour les démarches administratives"
-    },
-    {
-      "name": "rediger_courrier",
-      "description": "Rédige un courrier administratif formel"
-    },
-    {
-      "name": "verifier_convention_collective",
-      "description": "Vérifie les droits sous une convention collective"
-    },
-    {
-      "name": "simuler_retraite",
-      "description": "Simulation simplifiée de la retraite"
+      "registryType": "npm",
+      "identifier": "french-admin-mcp",
+      "version": "1.0.1",
+      "transport": {
+        "type": "stdio"
+      }
     }
   ]
 }
