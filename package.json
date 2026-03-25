@@ -1,6 +1,6 @@
 {
   "name": "french-admin-mcp",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Serveur MCP pour l'administration française — impôts, URSSAF, CAF, factures, courriers administratifs",
   "type": "module",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
     "claude",
     "model-context-protocol"
   ],
-  "author": "Thomas Gorisse <thomas.gorisse@gmail.com>",
+  "author": "SceneView Tools",
   "license": "MIT",
   "repository": {
     "type": "git",

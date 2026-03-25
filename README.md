@@ -115,4 +115,4 @@ MIT
 
 ## Auteur
 
-Thomas Gorisse — [thomas.gorisse@gmail.com](mailto:thomas.gorisse@gmail.com)
+SceneView Tools
