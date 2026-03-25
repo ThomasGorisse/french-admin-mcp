@@ -1,6 +1,6 @@
 {
   "name": "french-admin-mcp",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Serveur MCP pour l'administration française — impôts, URSSAF, CAF, factures, courriers administratifs",
   "type": "module",
   "main": "dist/index.js",
@@ -56,5 +56,6 @@
     "README.md",
     "LICENSE",
     "server.json"
-  ]
+  ],
+  "mcpName": "io.github.ThomasGorisse/french-admin-mcp"
 }
