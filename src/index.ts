@@ -20,10 +20,13 @@ import { getProcedure, listProcedures } from "./data/procedures.js";
 import { redigerCourrier } from "./tools/rediger-courrier.js";
 import { rechercherConvention, listConventions } from "./data/conventions.js";
 import { simulerRetraite } from "./tools/simuler-retraite.js";
+import { simulerChomage } from "./tools/simuler-chomage.js";
+import { calculerIndemnitesLicenciement } from "./tools/calculer-indemnites-licenciement.js";
+import { verifierDroitsFormation } from "./tools/verifier-droits-formation.js";
 
 const server = new McpServer({
   name: "french-admin-mcp",
-  version: "1.0.0",
+  version: "2.0.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -320,6 +323,80 @@ server.tool(
   async (args) => {
     try {
       const result = simulerRetraite(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── simuler_chomage ─────────────────────────────────────────────────
+server.tool(
+  "simuler_chomage",
+  "Estime l'allocation chômage (ARE — Aide au Retour à l'Emploi). Calcule le montant journalier/mensuel, la durée d'indemnisation et les démarches France Travail. Barème 2026.",
+  {
+    salaireBrutMensuelMoyen: z.number().describe("Salaire brut mensuel moyen des 24 derniers mois"),
+    moisTravailles: z.number().min(0).describe("Nombre de mois travaillés sur les 24 derniers mois (minimum 6 pour être éligible)"),
+    age: z.number().min(16).max(67).describe("Âge au moment de la fin de contrat"),
+    motifRupture: z
+      .enum(["licenciement", "rupture_conventionnelle", "fin_cdd", "demission_legitime"])
+      .describe("Motif de la rupture du contrat"),
+  },
+  async (args) => {
+    try {
+      const result = simulerChomage(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── calculer_indemnites_licenciement ────────────────────────────────
+server.tool(
+  "calculer_indemnites_licenciement",
+  "Calcule l'indemnité légale de licenciement selon le Code du travail. Prend en compte l'ancienneté, le salaire de référence, et le motif. Inclut le régime fiscal.",
+  {
+    salaireBrutMensuel: z.number().describe("Salaire brut mensuel moyen des 12 derniers mois"),
+    salaireBrutMensuelAvecPrimes: z.number().optional().describe("Salaire brut mensuel moyen des 3 derniers mois (primes incluses au prorata)"),
+    ancienneteAnnees: z.number().min(0).describe("Années complètes d'ancienneté"),
+    ancienneteMois: z.number().min(0).max(11).optional().describe("Mois supplémentaires d'ancienneté (0-11)"),
+    motif: z
+      .enum(["licenciement_personnel", "licenciement_economique", "inaptitude_professionnelle", "inaptitude_non_professionnelle", "rupture_conventionnelle"])
+      .describe("Motif de la rupture"),
+  },
+  async (args) => {
+    try {
+      const result = calculerIndemnitesLicenciement(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── verifier_droits_formation ───────────────────────────────────────
+server.tool(
+  "verifier_droits_formation",
+  "Vérifie les droits au CPF (Compte Personnel de Formation). Estime le solde, les plafonds d'utilisation (2026), le reste à charge obligatoire (103,20 €), et les abondements possibles.",
+  {
+    anneesTravaillees: z.number().min(0).describe("Nombre d'années travaillées au total"),
+    tempsPlein: z.boolean().describe("Travail à temps plein (true) ou partiel (false)"),
+    quotiteTempsPartiel: z.number().min(0).max(1).optional().describe("Quotité temps partiel (ex: 0.8 pour 80%). Ignoré si temps plein."),
+    niveauQualification: z
+      .enum(["bac_plus", "bac_ou_moins", "sans_diplome"])
+      .describe("Niveau de qualification : bac_plus, bac_ou_moins, sans_diplome"),
+    travailleurHandicape: z.boolean().optional().describe("Reconnaissance travailleur handicapé (RQTH)"),
+    montantCPFConnu: z.number().optional().describe("Montant CPF déjà connu (consultable sur moncompteformation.gouv.fr)"),
+    typeFormationEnvisagee: z
+      .enum(["diplome", "certification", "bilan_competences", "permis_conduire", "vae", "creation_entreprise", "autre"])
+      .optional()
+      .describe("Type de formation envisagée (pour vérifier les plafonds)"),
+    coutFormation: z.number().optional().describe("Coût de la formation envisagée en euros"),
+  },
+  async (args) => {
+    try {
+      const result = verifierDroitsFormation(args);
       return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
     } catch (e: any) {
       return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };

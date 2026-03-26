@@ -5,7 +5,7 @@ import { calculerChargesTrimestrielles } from "../src/data/urssaf-rates.js";
 describe("calculerChargesTrimestrielles", () => {
   it("calcule les charges BNC sur 10000€", () => {
     const charges = calculerChargesTrimestrielles(10_000, "services_bnc");
-    expect(charges.cotisationsSociales).toBeCloseTo(2330, 0);
+    expect(charges.cotisationsSociales).toBeCloseTo(2540, 0); // 25.4% en 2026 (était 23.3% en 2025)
     expect(charges.cfp).toBeCloseTo(20, 0);
     expect(charges.total).toBeGreaterThan(0);
     expect(charges.caNet).toBeLessThan(10_000);

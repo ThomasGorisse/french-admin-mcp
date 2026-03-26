@@ -8,6 +8,8 @@ import {
   ABATTEMENT_SALAIRES_MAX,
   DECOTE_SEUIL_CELIBATAIRE_2025,
   DECOTE_SEUIL_COUPLE_2025,
+  DECOTE_SEUIL_CELIBATAIRE_2026,
+  DECOTE_SEUIL_COUPLE_2026,
 } from "../data/tax-brackets.js";
 
 export interface SimulationImpotsInput {
@@ -81,10 +83,10 @@ export function simulerImpots(input: SimulationImpotsInput): SimulationImpotsRes
 
   // Décote (simplifiée)
   let decote = 0;
-  const seuilDecote =
-    input.situationFamiliale === "marie" || input.situationFamiliale === "pacse"
-      ? DECOTE_SEUIL_COUPLE_2025
-      : DECOTE_SEUIL_CELIBATAIRE_2025;
+  const isCouple = input.situationFamiliale === "marie" || input.situationFamiliale === "pacse";
+  const seuilDecote = annee >= 2025
+    ? (isCouple ? DECOTE_SEUIL_COUPLE_2026 : DECOTE_SEUIL_CELIBATAIRE_2026)
+    : (isCouple ? DECOTE_SEUIL_COUPLE_2025 : DECOTE_SEUIL_CELIBATAIRE_2025);
 
   if (impotBrut > 0 && impotBrut < seuilDecote) {
     decote = Math.round(seuilDecote - impotBrut * 0.4525);

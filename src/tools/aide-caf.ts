@@ -112,7 +112,7 @@ export function estimerAidesCAF(input: AideCAFInput): AideCAFResult {
     totalEstimeMensuel: Math.round(totalEstime * 100) / 100,
     demarchesRecommandees: demarches,
     avertissement:
-      "⚠️ Estimations indicatives basées sur les barèmes 2025. " +
+      "⚠️ Estimations indicatives basées sur les barèmes 2025/2026. " +
       "Les montants réels dépendent de nombreux paramètres non pris en compte ici " +
       "(patrimoine, autres aides, situation détaillée). " +
       "Pour une estimation précise, utilisez le simulateur officiel sur caf.fr ou mesdroitssociaux.gouv.fr.",

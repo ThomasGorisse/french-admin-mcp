@@ -21,26 +21,30 @@ export const TAX_BRACKETS_2025: TaxBracket[] = [
   { min: 177_106, max: Infinity, rate: 0.45 },
 ];
 
-/** Barème 2026 sur revenus 2025 (estimé, indexé ~1.8 %) */
+/** Barème 2026 sur revenus 2025 (officiel, loi de finances 2026, indexé +0.9 %) */
 export const TAX_BRACKETS_2026: TaxBracket[] = [
-  { min: 0, max: 11_497, rate: 0 },
-  { min: 11_497, max: 29_315, rate: 0.11 },
-  { min: 29_315, max: 83_823, rate: 0.30 },
-  { min: 83_823, max: 180_294, rate: 0.41 },
-  { min: 180_294, max: Infinity, rate: 0.45 },
+  { min: 0, max: 11_600, rate: 0 },
+  { min: 11_600, max: 29_579, rate: 0.11 },
+  { min: 29_579, max: 84_577, rate: 0.30 },
+  { min: 84_577, max: 181_917, rate: 0.41 },
+  { min: 181_917, max: Infinity, rate: 0.45 },
 ];
 
 /** Plafond du quotient familial (par demi-part au-delà de 2) */
 export const QF_PLAFOND_2025 = 1_759;
 export const QF_PLAFOND_2026 = 1_791;
 
-/** Décote 2025 */
+/** Décote 2025 (revenus 2024) */
 export const DECOTE_SEUIL_CELIBATAIRE_2025 = 1_929;
 export const DECOTE_SEUIL_COUPLE_2025 = 3_191;
 
+/** Décote 2026 (revenus 2025) — indexée +0.9% */
+export const DECOTE_SEUIL_CELIBATAIRE_2026 = 1_946;
+export const DECOTE_SEUIL_COUPLE_2026 = 3_220;
+
 /** Abattement forfaitaire 10 % salaires */
-export const ABATTEMENT_SALAIRES_MIN = 495;
-export const ABATTEMENT_SALAIRES_MAX = 14_171;
+export const ABATTEMENT_SALAIRES_MIN = 504;
+export const ABATTEMENT_SALAIRES_MAX = 14_426;
 export const ABATTEMENT_SALAIRES_RATE = 0.10;
 
 /**

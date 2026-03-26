@@ -31,9 +31,9 @@ export interface RetraiteResult {
   avertissement: string;
 }
 
-// Plafond Sécurité Sociale 2025
-const PASS_ANNUEL = 47_100;
-const PASS_MENSUEL = 3_925;
+// Plafond Sécurité Sociale 2026 (+2%)
+const PASS_ANNUEL = 48_060;
+const PASS_MENSUEL = 4_005;
 
 // Salaire de référence Agirc-Arrco 2025 (prix d'achat d'un point)
 const PRIX_POINT_AGIRC_ARRCO = 18.7669;

@@ -1,8 +1,10 @@
 /**
  * Taux URSSAF pour les auto-entrepreneurs (micro-entrepreneurs).
- * Mis à jour : barème 2025.
+ * Mis à jour : barème 2026 (applicable au 1er janvier 2026).
  *
  * Source : urssaf.fr — taux de cotisations sociales micro-entreprise.
+ * BNC passé de 24.6% (2025) à 25.6% (2026).
+ * Commerce, Services BIC et CIPAV : inchangés.
  */
 
 export interface UrssafRate {
@@ -19,18 +21,18 @@ export const URSSAF_RATES: Record<string, UrssafRate> = {
   services_bic: {
     activite: "Prestations de services (BIC)",
     description: "Artisanat, prestations de services commerciales",
-    tauxCotisations: 0.216,
+    tauxCotisations: 0.212,
     tauxCFP: 0.003,
-    tauxTotal: 0.219,
+    tauxTotal: 0.215,
     abattementMicro: 0.50,
     plafondCA: 77_700,
   },
   services_bnc: {
     activite: "Prestations de services (BNC)",
     description: "Professions libérales, conseil, dev, formation",
-    tauxCotisations: 0.233,
+    tauxCotisations: 0.254,
     tauxCFP: 0.002,
-    tauxTotal: 0.235,
+    tauxTotal: 0.256,
     abattementMicro: 0.34,
     plafondCA: 77_700,
   },

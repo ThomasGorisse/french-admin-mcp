@@ -116,7 +116,7 @@ export function calculerChargesAE(input: ChargesAEInput): ChargesAEResult {
       ? Math.round((economieAcre / diviseur) * 100) / 100
       : 0,
     avertissement:
-      "⚠️ Calcul indicatif basé sur les taux URSSAF 2025. " +
+      "⚠️ Calcul indicatif basé sur les taux URSSAF 2026. " +
       "Les taux réels peuvent varier selon votre situation. " +
       "Consultez autoentrepreneur.urssaf.fr pour les montants exacts." +
       (caAnnuel > rate.plafondCA
