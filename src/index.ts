@@ -26,7 +26,7 @@ import { verifierDroitsFormation } from "./tools/verifier-droits-formation.js";
 
 const server = new McpServer({
   name: "french-admin-mcp",
-  version: "2.0.0",
+  version: "2.1.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -403,6 +403,167 @@ server.tool(
     }
   }
 );
+
+// ─── verifier_eligibilite_rsa ────────────────────────────────────────
+server.tool(
+  "verifier_eligibilite_rsa",
+  "Vérifie l'éligibilité au RSA (Revenu de Solidarité Active) selon les critères 2026. Calcule le montant estimé en fonction de la composition du foyer, des ressources et de la situation. Inclut les montants forfaitaires à jour, le calcul des droits, et les démarches CAF/MSA.",
+  {
+    age: z.number().min(18).max(67).describe("Âge du demandeur"),
+    situationFamiliale: z
+      .enum(["seul", "couple"])
+      .describe("Seul(e) ou en couple"),
+    enfants: z.number().min(0).describe("Nombre d'enfants à charge"),
+    enceinte: z.boolean().optional().describe("Femme enceinte (majoration isolement)"),
+    parentIsole: z.boolean().optional().describe("Parent isolé (majoration)"),
+    ressourcesMensuelles: z.number().min(0).describe("Total des ressources mensuelles du foyer en euros (salaires, allocations, pensions, revenus du patrimoine)"),
+    allocationLogement: z.boolean().optional().describe("Perçoit une allocation logement (APL, ALS, ALF) ou hébergé gratuitement"),
+    nationalite: z
+      .enum(["francais", "ue", "hors_ue_titre_sejour", "hors_ue_sans_titre"])
+      .optional()
+      .describe("Nationalité / situation administrative (défaut : français)"),
+    activite: z
+      .enum(["sans_activite", "activite_faible", "etudiant", "stagiaire"])
+      .optional()
+      .describe("Situation d'activité"),
+  },
+  async (args) => {
+    try {
+      const result = verifierEligibiliteRSA(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+/**
+ * RSA eligibility calculation — barèmes 2026 (montants revalorisés avril 2025).
+ */
+function verifierEligibiliteRSA(args: {
+  age: number;
+  situationFamiliale: "seul" | "couple";
+  enfants: number;
+  enceinte?: boolean;
+  parentIsole?: boolean;
+  ressourcesMensuelles: number;
+  allocationLogement?: boolean;
+  nationalite?: string;
+  activite?: string;
+}) {
+  // Montant forfaitaire RSA 2026 (base personne seule, revalorisé avril 2025)
+  const BASE_RSA = 635.71; // montant mensuel personne seule sans enfant
+
+  // Calcul du nombre de parts
+  let parts = args.situationFamiliale === "couple" ? 2 : 1;
+  if (args.enfants >= 1) parts += 0.5;
+  if (args.enfants >= 2) parts += 0.5;
+  if (args.enfants >= 3) parts += args.enfants - 2; // 1 part par enfant supplémentaire à partir du 3ème
+
+  // Montant forfaitaire selon la composition
+  let montantForfaitaire: number;
+  if (args.situationFamiliale === "seul") {
+    if (args.enfants === 0) montantForfaitaire = BASE_RSA;
+    else if (args.enfants === 1) montantForfaitaire = BASE_RSA * 1.5;
+    else if (args.enfants === 2) montantForfaitaire = BASE_RSA * 1.83;
+    else montantForfaitaire = BASE_RSA * (1.83 + (args.enfants - 2) * 0.35);
+  } else {
+    if (args.enfants === 0) montantForfaitaire = BASE_RSA * 1.5;
+    else if (args.enfants === 1) montantForfaitaire = BASE_RSA * 1.83;
+    else if (args.enfants === 2) montantForfaitaire = BASE_RSA * 2.14;
+    else montantForfaitaire = BASE_RSA * (2.14 + (args.enfants - 2) * 0.35);
+  }
+
+  // Majoration parent isolé
+  if (args.parentIsole) {
+    const majorationIsolement = BASE_RSA * 0.5072; // ~128,412 €/mois base
+    const majorationEnfant = BASE_RSA * 0.2534 * args.enfants;
+    montantForfaitaire = BASE_RSA + majorationIsolement + majorationEnfant;
+    if (args.enceinte) {
+      montantForfaitaire += BASE_RSA * 0.2534; // majoration grossesse
+    }
+  }
+
+  // Forfait logement (déduit si allocation logement ou hébergement gratuit)
+  let forfaitLogement = 0;
+  if (args.allocationLogement) {
+    if (parts <= 1) forfaitLogement = BASE_RSA * 0.12;
+    else if (parts <= 2) forfaitLogement = BASE_RSA * 0.16;
+    else forfaitLogement = BASE_RSA * 0.166;
+  }
+
+  // Montant RSA = forfaitaire - ressources - forfait logement
+  const montantRSA = Math.max(0, Math.round((montantForfaitaire - args.ressourcesMensuelles - forfaitLogement) * 100) / 100);
+
+  // Conditions d'éligibilité
+  const conditions: string[] = [];
+  let eligible = true;
+
+  // Âge
+  if (args.age < 25 && args.enfants === 0 && !args.enceinte) {
+    conditions.push("Le RSA est réservé aux 25 ans et plus (sauf parent isolé, femme enceinte, ou RSA Jeune sous conditions)");
+    eligible = false;
+  }
+
+  // Nationalité
+  const nat = args.nationalite || "francais";
+  if (nat === "hors_ue_sans_titre") {
+    conditions.push("Un titre de séjour en cours de validité est requis pour les ressortissants hors UE");
+    eligible = false;
+  }
+  if (nat === "ue") {
+    conditions.push("Ressortissant UE : droit de séjour requis (>3 mois de résidence ou activité professionnelle)");
+  }
+
+  // Activité
+  if (args.activite === "etudiant") {
+    conditions.push("Les étudiants ne sont généralement pas éligibles au RSA, sauf si parent isolé ou en interruption d'études");
+    eligible = false;
+  }
+
+  // Montant trop faible
+  if (montantRSA < 6) {
+    conditions.push("Montant RSA inférieur au seuil de versement (6 €)");
+    eligible = false;
+  }
+
+  // Ressources trop élevées
+  if (args.ressourcesMensuelles >= montantForfaitaire) {
+    conditions.push("Ressources supérieures ou égales au montant forfaitaire");
+    eligible = false;
+  }
+
+  const demarches = [
+    "1. Faire une simulation sur caf.fr ou msa.fr",
+    "2. Constituer le dossier : pièce d'identité, justificatif de domicile, relevé bancaire (3 derniers mois), avis d'imposition",
+    "3. Déposer la demande en ligne sur caf.fr (Mon Compte > Mes démarches > RSA) ou auprès de votre CAF/MSA",
+    "4. Un rendez-vous d'orientation sera proposé dans les 2 mois suivant l'ouverture des droits",
+    "5. Le RSA est soumis à des droits et devoirs : recherche d'emploi, accompagnement social ou professionnel",
+  ];
+
+  return {
+    eligible,
+    montantForfaitaire: Math.round(montantForfaitaire * 100) / 100,
+    forfaitLogement: Math.round(forfaitLogement * 100) / 100,
+    ressourcesDeclarees: args.ressourcesMensuelles,
+    montantRSAEstime: eligible ? montantRSA : 0,
+    composition: {
+      situation: args.situationFamiliale,
+      enfants: args.enfants,
+      parts,
+      parentIsole: args.parentIsole || false,
+      enceinte: args.enceinte || false,
+    },
+    conditions: conditions.length > 0 ? conditions : ["Toutes les conditions sont remplies"],
+    demarches,
+    references: [
+      "Barème RSA 2026 (revalorisé avril 2025)",
+      "Articles L262-1 et suivants du Code de l'action sociale et des familles",
+      "caf.fr — Simulateur RSA",
+      "service-public.fr — Revenu de solidarité active (RSA)",
+    ],
+  };
+}
 
 // ─── Start server ─────────────────────────────────────────────────────
 async function main() {
