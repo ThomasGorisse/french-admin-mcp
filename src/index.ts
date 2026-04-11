@@ -23,6 +23,9 @@ import { simulerRetraite } from "./tools/simuler-retraite.js";
 import { simulerChomage } from "./tools/simuler-chomage.js";
 import { calculerIndemnitesLicenciement } from "./tools/calculer-indemnites-licenciement.js";
 import { verifierDroitsFormation } from "./tools/verifier-droits-formation.js";
+import { simulerAidesLogement } from "./tools/simuler-aides-logement.js";
+import { calculerIndemniteConges } from "./tools/calculer-indemnites-conges.js";
+import { verifierDroitsChomageDemission } from "./tools/verifier-droits-chomage-demission.js";
 
 const server = new McpServer({
   name: "french-admin-mcp",
@@ -397,6 +400,82 @@ server.tool(
   async (args) => {
     try {
       const result = verifierDroitsFormation(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── simuler_aides_logement ──────────────────────────────────────────
+server.tool(
+  "simuler_aides_logement",
+  "Simule les aides au logement (APL, ALF, ALS). Estime le montant mensuel selon le loyer, la zone géographique, la composition du foyer et les revenus. Barème 2025-2026.",
+  {
+    loyer_mensuel: z.number().describe("Loyer mensuel en euros (charges non comprises)"),
+    zone: z
+      .number()
+      .min(1)
+      .max(3)
+      .describe("Zone géographique : 1 (Île-de-France), 2 (grandes agglomérations), 3 (reste de la France)"),
+    situation: z
+      .enum(["locataire", "colocataire", "foyer"])
+      .describe("Situation de logement : locataire, colocataire, ou foyer/résidence"),
+    revenus_annuels: z.number().describe("Revenus annuels nets du foyer en euros (N-2)"),
+    nb_personnes_foyer: z.number().min(1).describe("Nombre total de personnes dans le foyer"),
+    type_logement: z
+      .enum(["appartement", "maison"])
+      .describe("Type de logement"),
+  },
+  async (args) => {
+    try {
+      const result = simulerAidesLogement({
+        ...args,
+        zone: args.zone as 1 | 2 | 3,
+      });
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── calculer_indemnites_conges ──────────────────────────────────────
+server.tool(
+  "calculer_indemnites_conges",
+  "Calcule les indemnités de congés payés selon les deux méthodes légales (maintien de salaire et dixième). Compare les deux et indique la plus favorable. Inclut l'estimation des charges sociales.",
+  {
+    salaire_brut_mensuel: z.number().describe("Salaire brut mensuel en euros"),
+    jours_acquis: z.number().min(1).max(30).describe("Nombre de jours ouvrables de congés acquis (max 30)"),
+    methode: z
+      .enum(["maintien_salaire", "dixieme"])
+      .describe("Méthode de calcul : maintien_salaire ou dixieme (1/10ème)"),
+    jours_pris: z.number().min(1).describe("Nombre de jours de congés à indemniser"),
+  },
+  async (args) => {
+    try {
+      const result = calculerIndemniteConges(args);
+      return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
+    } catch (e: any) {
+      return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
+    }
+  }
+);
+
+// ─── verifier_droits_chomage_demission ───────────────────────────────
+server.tool(
+  "verifier_droits_chomage_demission",
+  "Vérifie l'éligibilité au chômage (ARE) après une démission. Analyse le motif, détermine si c'est une démission légitime ou reconversion, estime le montant et la durée, détaille les démarches France Travail.",
+  {
+    motif_demission: z
+      .enum(["reconversion", "creation_entreprise", "suivi_conjoint", "harcelement", "non_paiement", "autre"])
+      .describe("Motif de la démission"),
+    anciennete_mois: z.number().min(0).describe("Ancienneté en mois dans l'emploi quitté"),
+    salaire_brut_mensuel: z.number().describe("Dernier salaire brut mensuel en euros"),
+  },
+  async (args) => {
+    try {
+      const result = verifierDroitsChomageDemission(args);
       return { content: [{ type: "text" as const, text: addDisclaimer(JSON.stringify(result, null, 2)) }] };
     } catch (e: any) {
       return { content: [{ type: "text" as const, text: `Erreur : ${e.message}` }], isError: true };
