@@ -3,9 +3,9 @@ import { genererFacture } from "../src/tools/generer-facture.js";
 
 describe("genererFacture", () => {
   const baseInput = {
-    nomEmetteur: "Thomas Gorisse",
+    nomEmetteur: "Jean Dupont",
     siret: "12345678901234",
-    adresseEmetteur: "10 rue de la Paix, 44000 Nantes",
+    adresseEmetteur: "10 rue de la République, 75001 Paris",
     nomClient: "Entreprise ABC",
     adresseClient: "5 avenue des Champs, 75008 Paris",
     numeroFacture: "F-2025-001",
@@ -29,7 +29,7 @@ describe("genererFacture", () => {
 
     expect(result.mentionsLegales).toContain("TVA non applicable, art. 293 B du CGI");
     expect(result.texteFacture).toContain("FACTURE");
-    expect(result.texteFacture).toContain("Thomas Gorisse");
+    expect(result.texteFacture).toContain("Jean Dupont");
     expect(result.texteFacture).toContain("12345678901234");
   });
 

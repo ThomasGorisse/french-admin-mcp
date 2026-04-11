@@ -14,7 +14,7 @@ french-admin-mcp est un serveur Model Context Protocol (MCP) qui fournit aux ass
 
 LE SERVICE EST FOURNI « EN L'ÉTAT » ET « TEL QUE DISPONIBLE » SANS GARANTIE D'AUCUNE SORTE, EXPRESSE OU IMPLICITE, Y COMPRIS MAIS SANS S'Y LIMITER LES GARANTIES IMPLICITES DE QUALITÉ MARCHANDE, D'ADÉQUATION À UN USAGE PARTICULIER ET D'ABSENCE DE CONTREFAÇON.
 
-Thomas Gorisse ne garantit pas que :
+MCP Tools Lab ne garantit pas que :
 - Le Service répondra à vos besoins
 - Le Service sera ininterrompu, ponctuel, sécurisé ou exempt d'erreurs
 - Les résultats obtenus seront exacts ou fiables
@@ -36,9 +36,9 @@ Vous devez :
 
 ## 5. Limitation de responsabilité
 
-EN AUCUN CAS THOMAS GORISSE OU LES CONTRIBUTEURS NE POURRONT ÊTRE TENUS RESPONSABLES DE TOUT DOMMAGE DIRECT, INDIRECT, ACCESSOIRE, SPÉCIAL, CONSÉCUTIF OU EXEMPLAIRE (Y COMPRIS MAIS SANS S'Y LIMITER L'ACQUISITION DE BIENS OU SERVICES DE SUBSTITUTION, LA PERTE D'USAGE, DE DONNÉES OU DE BÉNÉFICES, OU L'INTERRUPTION D'ACTIVITÉ) QUELLE QU'EN SOIT LA CAUSE ET SELON TOUTE THÉORIE DE RESPONSABILITÉ, QUE CE SOIT EN CONTRAT, RESPONSABILITÉ STRICTE OU DÉLICTUELLE (Y COMPRIS LA NÉGLIGENCE OU AUTRE) DÉCOULANT DE QUELQUE MANIÈRE QUE CE SOIT DE L'UTILISATION DE CE SERVICE, MÊME SI INFORMÉ DE LA POSSIBILITÉ DE TELS DOMMAGES.
+EN AUCUN CAS MCP TOOLS LAB OU LES CONTRIBUTEURS NE POURRONT ÊTRE TENUS RESPONSABLES DE TOUT DOMMAGE DIRECT, INDIRECT, ACCESSOIRE, SPÉCIAL, CONSÉCUTIF OU EXEMPLAIRE (Y COMPRIS MAIS SANS S'Y LIMITER L'ACQUISITION DE BIENS OU SERVICES DE SUBSTITUTION, LA PERTE D'USAGE, DE DONNÉES OU DE BÉNÉFICES, OU L'INTERRUPTION D'ACTIVITÉ) QUELLE QU'EN SOIT LA CAUSE ET SELON TOUTE THÉORIE DE RESPONSABILITÉ, QUE CE SOIT EN CONTRAT, RESPONSABILITÉ STRICTE OU DÉLICTUELLE (Y COMPRIS LA NÉGLIGENCE OU AUTRE) DÉCOULANT DE QUELQUE MANIÈRE QUE CE SOIT DE L'UTILISATION DE CE SERVICE, MÊME SI INFORMÉ DE LA POSSIBILITÉ DE TELS DOMMAGES.
 
-**Responsabilité maximale :** En aucun cas la responsabilité totale cumulée ne pourra excéder le montant que vous avez versé à Thomas Gorisse pour le Service au cours des douze (12) mois précédant la réclamation, ou 0 EUR (zéro) si aucun paiement n'a été effectué.
+**Responsabilité maximale :** En aucun cas la responsabilité totale cumulée ne pourra excéder le montant que vous avez versé à MCP Tools Lab pour le Service au cours des douze (12) mois précédant la réclamation, ou 0 EUR (zéro) si aucun paiement n'a été effectué.
 
 ## 6. Responsabilité de l'utilisateur
 
@@ -58,7 +58,7 @@ Vous acceptez que :
 
 ## 8. Disponibilité du Service
 
-Thomas Gorisse se réserve le droit de :
+MCP Tools Lab se réserve le droit de :
 - Modifier, suspendre ou interrompre le Service à tout moment sans préavis
 - Mettre à jour les présentes Conditions à tout moment ; l'utilisation continue vaut acceptation
 - Limiter ou restreindre l'accès au Service à tout moment
@@ -70,7 +70,7 @@ Consultez [PRIVACY.md](./PRIVACY.md) pour notre politique de confidentialité. E
 
 ## 10. Droit applicable
 
-Les présentes Conditions sont régies par le droit **français**. Tout litige sera soumis à la compétence exclusive des tribunaux de **Nantes, France** (Tribunal judiciaire de Nantes).
+Les présentes Conditions sont régies par le droit **français**. Tout litige sera soumis à la compétence exclusive des tribunaux français compétents.
 
 ## 11. Conformité RGPD
 

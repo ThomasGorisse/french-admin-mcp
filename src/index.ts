@@ -36,7 +36,7 @@ const server = new McpServer({
 // Avertissement juridique
 // ---------------------------------------------------------------------------
 
-const DISCLAIMER = '\n\n---\n*Estimation indicative uniquement. Ne constitue pas un conseil fiscal ou juridique. Consultez un expert-comptable ou un avocat. Voir [TERMS.md](https://github.com/thomasgorisse/french-admin-mcp/blob/main/TERMS.md).*';
+const DISCLAIMER = '\n\n---\n*Estimation indicative uniquement. Ne constitue pas un conseil fiscal ou juridique. Consultez un expert-comptable ou un avocat. Voir [TERMS.md](https://github.com/mcp-tools-lab/french-admin-mcp/blob/main/TERMS.md).*';
 
 function addDisclaimer(text: string): string {
   return text + DISCLAIMER;

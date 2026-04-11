@@ -27,8 +27,8 @@ describe("redigerCourrier", () => {
   it("rédige une mise en demeure", () => {
     const result = redigerCourrier({
       type: "mise_en_demeure",
-      expediteur: { nom: "Marie Martin", adresse: "5 allée des Roses, 44000 Nantes" },
-      destinataire: { nom: "SAS Travaux Express", adresse: "Zone Industrielle, 44100 Nantes" },
+      expediteur: { nom: "Marie Martin", adresse: "5 allée des Roses, 75011 Paris" },
+      destinataire: { nom: "SAS Travaux Express", adresse: "Zone Industrielle, 93100 Montreuil" },
       objet: "Mise en demeure — travaux non conformes",
       contexte: "Les travaux réalisés le 15 janvier ne sont pas conformes au devis signé.",
       demandeSpecifique: "reprendre les travaux sous 15 jours",
