@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.ThomasGorisse/french-admin-mcp",
+  "name": "io.github.mcp-tools-lab/french-admin-mcp",
   "description": "French admin MCP — tax simulation, URSSAF, CAF, invoices, official letters, retirement.",
   "repository": {
-    "url": "https://github.com/ThomasGorisse/french-admin-mcp",
+    "url": "https://github.com/mcp-tools-lab/french-admin-mcp",
     "source": "github"
   },
   "version": "1.0.1",

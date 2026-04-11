@@ -1,6 +1,6 @@
 {
   "name": "french-admin-mcp",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Serveur MCP pour l'administration française — impôts, URSSAF, CAF, chômage (ARE), licenciement, CPF, factures, courriers administratifs. Barèmes 2026.",
   "type": "module",
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thomasgorisse/french-admin-mcp.git"
+    "url": "https://github.com/mcp-tools-lab/french-admin-mcp.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -63,7 +63,7 @@
     "LICENSE",
     "server.json"
   ],
-  "mcpName": "io.github.ThomasGorisse/french-admin-mcp",
+  "mcpName": "io.github.mcp-tools-lab/french-admin-mcp",
   "funding": [
     {
       "type": "github",

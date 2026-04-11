@@ -82,4 +82,4 @@ Si une disposition des présentes Conditions est jugée inapplicable, les dispos
 
 ## 13. Contact
 
-Thomas Gorisse — [https://github.com/thomasgorisse/french-admin-mcp](https://github.com/thomasgorisse/french-admin-mcp)
+MCP Tools Lab — [https://github.com/mcp-tools-lab/french-admin-mcp](https://github.com/mcp-tools-lab/french-admin-mcp)

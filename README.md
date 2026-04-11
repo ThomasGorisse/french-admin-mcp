@@ -112,7 +112,7 @@ Simulation simplifiee de la retraite : pension de base (CNAV), complementaire (A
 ## Developpement
 
 ```bash
-git clone https://github.com/thomasgorisse/french-admin-mcp.git
+git clone https://github.com/mcp-tools-lab/french-admin-mcp.git
 cd french-admin-mcp
 npm install
 npm run build
